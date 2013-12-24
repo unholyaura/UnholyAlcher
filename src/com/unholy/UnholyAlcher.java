@@ -27,8 +27,6 @@ public class UnholyAlcher extends PollingScript implements PaintListener,
 	private int expGained;
 	private int initMagicExp;
 	private int expPerHour;
-	public int startTime;
-	private int currTime;
 	private int runningTime;
 	private int hours;
 	private int minutes;
@@ -46,8 +44,7 @@ public class UnholyAlcher extends PollingScript implements PaintListener,
 
 	@Override
 	public void repaint(Graphics g) {
-		currTime = (int) (System.currentTimeMillis() / 1000);
-		runningTime = currTime - startTime;
+		runningTime = (int) (getRuntime()/1000);
 		hours = runningTime / 3600;
 		minutes = runningTime / 60;
 		seconds = runningTime % 60;
@@ -67,6 +64,7 @@ public class UnholyAlcher extends PollingScript implements PaintListener,
 
 	@Override
 	public void start() {
+		initMagicExp = ctx.skills.getExperience(Skills.MAGIC);
 		taskList = new ArrayList<Task>();
 		taskList.add(new AlchTask(getContext()));
 	}
@@ -76,9 +74,6 @@ public class UnholyAlcher extends PollingScript implements PaintListener,
 		for (Task t : taskList) {
 			if (t.activate()) {
 				t.execute();
-			} else {
-				// System.out.println("reached stop code, still didnt stop");
-				return -1;
 			}
 		}
 		return 1;
