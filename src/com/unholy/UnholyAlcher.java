@@ -67,18 +67,7 @@ public class UnholyAlcher extends PollingScript implements PaintListener,
 
 	@Override
 	public void start() {
-		startTime = (int) (System.currentTimeMillis() / 1000);
 		taskList = new ArrayList<Task>();
-		alchCount = 0;
-		expGained = 0;
-		initMagicExp = ctx.skills.getExperience(Skills.MAGIC);
-		expPerHour = 0;
-		currTime = 0;
-		runningTime = 0;
-		hours = 0;
-		minutes = 0;
-		seconds = 0;
-
 		taskList.add(new AlchTask(getContext()));
 	}
 
