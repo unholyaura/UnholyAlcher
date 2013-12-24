@@ -14,42 +14,24 @@ import com.unholy.util.*;
 public class AlchTask extends Task {
 
 	public SkKeyboard keyboard;
-	private ArrayList<Integer> fireStaves = new ArrayList<Integer>();
-	private final int NATID = 561;
+	private final int NAT_ID = 561;
 	public Antipatterns a;
+	private final int[] fireIds = {1387, 1388, 1402, 1401, 3054, 3056, 1393, 1394,
+			3053, 3055, 11736, 11737, 11738, 11739, 23047, 26112, 19323, 19324};
 
 	public AlchTask(MethodContext cxt) {
 		super(cxt);
 		a = new Antipatterns(cxt);
 		keyboard = new SkKeyboard(cxt);
 		a.setEnabled(true);
-		fireStaves.add(1387);
-		fireStaves.add(1388);
-		fireStaves.add(1402);
-		fireStaves.add(1401);
-		fireStaves.add(3054);
-		fireStaves.add(3056);
-		fireStaves.add(1393);
-		fireStaves.add(1394);
-		fireStaves.add(3053);
-		fireStaves.add(3055);
-		fireStaves.add(11736);
-		fireStaves.add(11737);
-		fireStaves.add(11738);
-		fireStaves.add(11739);
-		fireStaves.add(23047);
-		fireStaves.add(26112);
-		fireStaves.add(19323);
-		fireStaves.add(19324);
 
 	}
 
 	@Override
 	public boolean activate() {
 
-		return (0 >= ctx.backpack.indexOf(NATID) || ctx.backpack.indexOf(NATID) <= 27)
-				&& (fireStaves.contains(ctx.equipment.getItemAt(
-						Equipment.Slot.MAIN_HAND).getId()))
+		return (!ctx.backpack.select().id(NAT_ID).isEmpty())
+				&& (!ctx.equipment.select().id(fireIds).isEmpty())
 				&& (ctx.players.local().getAnimation() == -1)
 				&& (ctx.backpack.select().count() > 1);
 	}
@@ -58,7 +40,7 @@ public class AlchTask extends Task {
 	public void execute() {
 
 		itemLoop: for (Item i : ctx.backpack.select()) {
-			if (i.getId() == NATID) {
+			if (i.getId() == NAT_ID) {
 				continue itemLoop;
 			}
 			i.hover();
