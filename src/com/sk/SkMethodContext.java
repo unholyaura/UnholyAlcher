@@ -28,6 +28,7 @@ public final class SkMethodContext extends MethodContext {
 	public SkMethodContext(AbstractScript script, MethodContext c) {
 		this(false, script, c);
 	}
+	
 
 	@Override
 	public void init(MethodContext ctx) {

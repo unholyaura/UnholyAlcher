@@ -1,29 +1,28 @@
 package com.unholy.tasks;
 
-import java.util.ArrayList;
-
-import org.powerbot.script.methods.Antipatterns;
-import org.powerbot.script.methods.Equipment;
 import org.powerbot.script.methods.MethodContext;
+import org.powerbot.script.util.Condition;
+import org.powerbot.script.util.Random;
+import org.powerbot.script.wrappers.Action;
 import org.powerbot.script.wrappers.Item;
 
 import com.sk.methods.SkKeyboard;
-
 import com.unholy.util.*;
 
 public class AlchTask extends Task {
 
-	public SkKeyboard keyboard;
 	private final int NAT_ID = 561;
-	public Antipatterns a;
-	private final int[] fireIds = {1387, 1388, 1402, 1401, 3054, 3056, 1393, 1394,
-			3053, 3055, 11736, 11737, 11738, 11739, 23047, 26112, 19323, 19324};
+	private final int HIGH_ALCH_ID = 758;
+	private final int[] fireIds = { 1387, 1388, 1402, 1401, 3054, 3056, 1393,
+			1394, 3053, 3055, 11736, 11737, 11738, 11739, 23047, 26112, 19323,
+			19324 };
+
+	public SkKeyboard keyboard;
 
 	public AlchTask(MethodContext cxt) {
 		super(cxt);
-		a = new Antipatterns(cxt);
+
 		keyboard = new SkKeyboard(cxt);
-		a.setEnabled(true);
 
 	}
 
@@ -39,23 +38,43 @@ public class AlchTask extends Task {
 	@Override
 	public void execute() {
 
-		itemLoop: for (Item i : ctx.backpack.select()) {
+		String key = findKey(HIGH_ALCH_ID);
+
+		for (Item i : ctx.backpack.select()) {
+
 			if (i.getId() == NAT_ID) {
-				continue itemLoop;
+				continue;
 			}
-			i.hover();
 			while (ctx.backpack.contains(i)) {
-				keyboard.press("c");
+				
+				ctx.keyboard.send(key);
 				sleep(100, 150);
-				keyboard.release("c");
-				sleep(100, 150);
-				i.click();
+				i.interact("Cast");
+				sleep(200, 250);
 				while (ctx.players.local().getAnimation() != -1) {
+					sleep(225, 250);
 				}
+				
 				ctx.backpack.select();
+				sleep(200, 250);
 			}
 		}
 
 	}
+
+	public String findKey(int keyId) {
+		String key = null;
+
+		Action[] bar = ctx.combatBar.getActions();
+		for (Action a : bar) {
+			if (a.getId() == keyId) {
+				key = a.getBind();
+				break;
+			}
+		}
+		return key;
+
+	}
+
 
 }

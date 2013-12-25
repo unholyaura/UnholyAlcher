@@ -12,6 +12,7 @@ import org.powerbot.event.PaintListener;
 import org.powerbot.script.Manifest;
 import org.powerbot.script.PollingScript;
 import org.powerbot.script.methods.Skills;
+import org.powerbot.script.util.Random;
 
 import com.unholy.tasks.AlchTask;
 import com.unholy.util.Task;
@@ -44,7 +45,7 @@ public class UnholyAlcher extends PollingScript implements PaintListener,
 
 	@Override
 	public void repaint(Graphics g) {
-		runningTime = (int) (getRuntime()/1000);
+		runningTime = (int) (getRuntime() / 1000);
 		hours = runningTime / 3600;
 		minutes = runningTime / 60;
 		seconds = runningTime % 60;
@@ -66,7 +67,7 @@ public class UnholyAlcher extends PollingScript implements PaintListener,
 	public void start() {
 		initMagicExp = ctx.skills.getExperience(Skills.MAGIC);
 		taskList = new ArrayList<Task>();
-		taskList.add(new AlchTask(getContext()));
+		taskList.add(new AlchTask(ctx));
 	}
 
 	@Override
@@ -76,7 +77,7 @@ public class UnholyAlcher extends PollingScript implements PaintListener,
 				t.execute();
 			}
 		}
-		return 1;
+		return Random.nextInt(200, 400);
 	}
 
 	@Override
